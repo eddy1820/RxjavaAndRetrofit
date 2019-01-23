@@ -35,8 +35,8 @@ public class RetrofitUtils {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(getOkHttpClient())
                 .baseUrl("")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create()) //使用Gson解析Json
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) //使retrofit支援RxJava
                 .build();
         return retrofit.create(service);
     }
@@ -44,19 +44,24 @@ public class RetrofitUtils {
 
     private OkHttpClient getOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        //timeout
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         builder.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+
+        //add header
         builder.addInterceptor(chain -> {
             String token = SpUtils.getString(MyApp.getContext(), SpUtils.TOKEN);
             Request original = chain.request();
             Request request = original.newBuilder()
                     .header("Accept", "application/json")
-                    .header("Authorization", TextUtils.isEmpty(token) ? "" : "Bearer " +token)
+                    .header("Authorization", TextUtils.isEmpty(token) ? "" : "Bearer " + token)
                     .method(original.method(), original.body())
                     .build();
             return chain.proceed(request);
         });
+
+        //api log
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(loggingInterceptor);

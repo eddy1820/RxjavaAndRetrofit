@@ -39,20 +39,27 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-
+    
     private void getUserProfile(FeAccountBo feAccountBo) {
         AccountService accountService = RetrofitUtils.getInstance().create(AccountService.class);
         PersonalService personalService = RetrofitUtils.getInstance().create(PersonalService.class);
-        addToDisposable(accountService.login(feAccountBo)
-                .subscribeOn(Schedulers.io())
-                .map(tokenDto -> {
+        //addToDisposable清理
+        addToDisposable(accountService.login(feAccountBo)//首次呼叫login
+                .subscribeOn(Schedulers.io())//io thread執行
+                .map(tokenDto -> {//成功後,將token記下
                     SpUtils.putParam(MainActivity.this, SpUtils.TOKEN, tokenDto.getData().getAccessToken());
                     return tokenDto;
                 })
+                //嵌套getUserProfile API, 此處需使用flatMap展開
                 .flatMap((Function<TokenDto, SingleSource<PersonalDataDto>>) tokenDto -> personalService.personalData())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(personalDataDto -> Log.e("==", "PersonalData:" + personalDataDto.toString()),
-                        f -> Log.e("==", "login fail:" + f.getMessage())));
+                .observeOn(AndroidSchedulers.mainThread()) //回到mainThread處理UI
+                .subscribe(
+                        //成功
+                        personalDataDto ->
+                                Log.e("==", "PersonalData:" + personalDataDto.toString()),
+                        //失敗
+                        throwable ->
+                                Log.e("==", "login fail:" + throwable.getMessage())));
     }
 
     @Override
