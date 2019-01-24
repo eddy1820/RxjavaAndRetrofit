@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SpUtils {
-    public static String TOKEN = "TOKEN";
+    public static String TOKEN = "KEY_TOKEN";
     private static SharedPreferences sp;
     public static void putParam(Context context,
                                 String paramName, boolean value) {
@@ -39,7 +39,7 @@ public class SpUtils {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(paramName, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static void putParam(Context context,
