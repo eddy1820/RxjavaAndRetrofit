@@ -6,6 +6,6 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 
 public interface PersonalService {
-    @GET("pd/personal-data")
+    @GET("/pd/personal-data")
     Single<PersonalDataDto> personalData();
 }

@@ -18,7 +18,6 @@ public class RetrofitUtils {
     private static final int DEFAULT_TIMEOUT = 10;
     private static RetrofitUtils INSTANCE;
 
-
     public static RetrofitUtils getInstance() {
         if (INSTANCE == null) {
             synchronized (RetrofitUtils.class) {
@@ -29,7 +28,6 @@ public class RetrofitUtils {
         }
         return INSTANCE;
     }
-
 
     public <S> S create(Class<S> service) {
         Retrofit retrofit = new Retrofit.Builder()

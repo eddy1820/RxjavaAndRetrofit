@@ -4,39 +4,33 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SpUtils {
-
     public static String TOKEN = "TOKEN";
-
     private static SharedPreferences sp;
-
     public static void putParam(Context context,
                                 String paramName, boolean value) {
         sp = context.getSharedPreferences("config" ,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(paramName, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean getBoolean(Context context,String paramName,boolean defautValue){
         sp = context.getSharedPreferences("config" ,
                 Context.MODE_PRIVATE);
-        boolean value = sp.getBoolean(paramName, defautValue);
-        return value;
+        return sp.getBoolean(paramName, defautValue);
     }
 
     public static String getString(Context context,String paramName){
         sp = context.getSharedPreferences("config" ,
                 Context.MODE_PRIVATE);
-        String value = sp.getString(paramName, "" );
-        return value;
+        return sp.getString(paramName, "" );
     }
 
     public static int getInt(Context context,String paramName){
         sp = context.getSharedPreferences("config" ,
                 Context.MODE_PRIVATE);
-        int value = sp.getInt(paramName, 0);
-        return value;
+        return sp.getInt(paramName, 0);
     }
 
     public static void putParam(Context context,
@@ -54,6 +48,6 @@ public class SpUtils {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(paramName, value);
-        editor.commit();
+        editor.apply();
     }
 }
