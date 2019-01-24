@@ -13,7 +13,7 @@ import com.example.eddy.rxjavaandretrofit.presenter.LoginPresenter;
 import com.example.eddy.rxjavaandretrofit.util.SpUtils;
 
 
-public class MainActivity extends AppCompatActivity implements ILoginView {
+public class MainActivity extends AppCompatActivity implements LoginPresenter.LoginCallback {
     LoginPresenter loginPresenter;
 
     @Override
@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements ILoginView {
         setContentView(R.layout.activity_main);
         loginPresenter = new LoginPresenter(this);
         initView();
+
+
     }
 
 
